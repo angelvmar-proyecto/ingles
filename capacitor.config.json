@@ -1,0 +1,14 @@
+{
+  "appId": "com.angelvmar.ingles",
+  "appName": "Oido Ingles",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#0f0f1e",
+    "webContentsDebuggingEnabled": true
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
