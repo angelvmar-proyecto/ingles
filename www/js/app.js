@@ -1,3 +1,6 @@
+let AUDIO_INDEX = {};
+fetch("assets/audio/clips_index.json").then(r=>r.json()).then(d=>{AUDIO_INDEX=d;console.log("Audios cargados:",Object.keys(d).length)}).catch(e=>console.log("Sin audios:",e));
+
 // Lógica principal de la app
 
 // Unir los dos archivos de datos en uno solo
@@ -58,6 +61,22 @@ if(ttsAvailable){
 }
 
 async function speak(text){
+  const palabra = text.toLowerCase().trim();
+  
+  // 1. Intentar usar audio real de VOA
+  if (AUDIO_INDEX[palabra] && AUDIO_INDEX[palabra].length > 0) {
+    const clips = AUDIO_INDEX[palabra];
+    const clip = clips[Math.floor(Math.random() * clips.length)];
+    const audio = new Audio('assets/audio/words/' + clip.archivo);
+    try {
+      await audio.play();
+      return;
+    } catch(e) {
+      console.log('Error audio real, usando TTS:', e);
+    }
+  }
+
+  // 2. Si no hay audio real, usar TTS (respaldo)
   try{
     if(window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.TextToSpeech){
       await window.Capacitor.Plugins.TextToSpeech.speak({text:text, lang:'en-US', rate:0.85, pitch:1.0, volume:1.0, category:'ambient'});
